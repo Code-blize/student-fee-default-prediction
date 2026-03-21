@@ -1,2 +1,2 @@
-# student-fee-default-prediction
-End-to-end machine learning pipeline for predicting student fee defaulters - featuring temporal split validation, SHAP explainability and a FastAPI inference endpoint.
+Fee defaulter prediction is a high-stakes classification problem in educational finance — a false negative means an institution absorbs avoidable losses, while a false positive damages a student's standing unfairly. This project builds a production-ready ML pipeline to identify students at risk of fee default using historical payment behaviour, enrolment patterns, and demographic features.
+The system goes beyond a notebook experiment: it includes a modular feature engineering pipeline, cost-sensitive threshold optimization, SHAP-based explainability, and a FastAPI endpoint ready for integration with school management systems. Experiment tracking is handled via MLflow; data versioning via DVC.
