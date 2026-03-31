@@ -14,17 +14,24 @@ def load_model(model_path: str | Path):
 
 
 def align_features(df: pd.DataFrame, model) -> pd.DataFrame:
-    """Align input features to the order expected by the model."""
+    """
+    Align input features to the exact columns expected by the trained model.
+    Missing columns are added with 0, extra columns are removed.
+    """
     if not hasattr(model, "feature_names_in_"):
-        return df
+        return df.copy()
 
     required_features = list(model.feature_names_in_)
 
-    missing = [col for col in required_features if col not in df.columns]
-    if missing:
-        raise ValueError(f"Missing required prediction features: {missing}")
+    aligned_df = df.copy()
 
-    return df[required_features].copy()
+    for col in required_features:
+        if col not in aligned_df.columns:
+            aligned_df[col] = 0
+
+    aligned_df = aligned_df[required_features]
+
+    return aligned_df
 
 
 def predict_batch(df: pd.DataFrame, model) -> pd.DataFrame:
@@ -41,9 +48,8 @@ def predict_batch(df: pd.DataFrame, model) -> pd.DataFrame:
     return result
 
 
-def predict_single(record: dict, model) -> dict:
-    """Generate prediction for a single record."""
-    df = pd.DataFrame([record])
+def predict_single(df: pd.DataFrame, model) -> dict:
+    """Generate prediction for a single prepared dataframe row."""
     result = predict_batch(df, model)
     row = result.iloc[0]
 
