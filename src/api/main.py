@@ -30,13 +30,17 @@ app = FastAPI(
 )
 
 
-@app.get("/")
+from fastapi.responses import HTMLResponse
+
+@app.get("/", response_class=HTMLResponse)
 def root():
-    return {
-        "message": "Fee Defaulter Prediction API is running.",
-        "docs": "/docs",
-        "health": "/health",
-    }
+    return """
+    <html>
+      <body>
+        <h1>Student Fee Defaulter Prediction API</h1>
+      </body>
+    </html>
+    """
 
 
 @app.get("/health")
