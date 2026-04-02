@@ -1,0 +1,50 @@
+name: Model Retrain
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 6 1 * *"
+
+jobs:
+  retrain:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Retrain model from processed data
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import pandas as pd
+
+          from src.models.train import run_experiments, get_best_model, save_results, save_model, save_best_split
+
+          project_root = Path(".")
+          full_path = project_root / "data" / "processed" / "02_features_full.csv"
+          strict_path = project_root / "data" / "processed" / "02_features_strict.csv"
+
+          df_full = pd.read_csv(full_path)
+          df_strict = pd.read_csv(strict_path)
+
+          results_df, trained_models, split_store = run_experiments(df_full, df_strict)
+          best_row, best_model = get_best_model(results_df, trained_models)
+
+          save_results(results_df, project_root / "reports" / "model_results.csv")
+          save_model(best_model, project_root / "models" / "best_model.pkl")
+          save_best_split(best_row["dataset"], split_store, project_root / "data" / "processed")
+
+          print("Retraining complete.")
+          print(best_row)
+          PY
