@@ -1,0 +1,31 @@
+project:
+  name: student-fee-default-prediction
+  target: default
+
+paths:
+  raw_data: data/raw/raw_student_data.csv
+  eda_output: data/processed/01_eda_output.csv
+  full_features: data/processed/02_features_full.csv
+  strict_features: data/processed/02_features_strict.csv
+  model_results: reports/model_results.csv
+  best_model: models/best_model.pkl
+  threshold_results: reports/threshold_results.csv
+
+features:
+  leakage_columns:
+    - G3
+    - failures
+    - absences
+
+target_engineering:
+  g3_threshold: 10
+  failure_threshold: 2
+  absence_threshold: 15
+
+training:
+  test_size: 0.2
+  random_state: 42
+
+api:
+  moderate_risk_threshold: 0.20
+  high_risk_threshold: 0.30
