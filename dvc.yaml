@@ -1,0 +1,19 @@
+stages:
+  features:
+    cmd: python -c "print('Feature pipeline handled in notebooks/src')"
+    deps:
+      - src/features/build_features.py
+      - data/processed/01_eda_output.csv
+    outs:
+      - data/processed/02_features_full.csv
+      - data/processed/02_features_strict.csv
+
+  train:
+    cmd: python -c "print('Training pipeline handled in src/models/train.py')"
+    deps:
+      - src/models/train.py
+      - data/processed/02_features_full.csv
+      - data/processed/02_features_strict.csv
+    outs:
+      - models/best_model.pkl
+      - reports/model_results.csv
