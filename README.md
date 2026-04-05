@@ -312,6 +312,16 @@ Each notebook saves its outputs to `data/processed/` or `reports/` for the next 
 
 ---
 
+## Additional Documentation
+
+Detailed project notes are available in the `docs/` folder:
+
+- `docs/project_overview.md`
+- `docs/api_usage.md`
+- `docs/deployment_guide.md`
+
+---
+
 ## Author
 
 **Blessing Obasi-Uzoma**  
